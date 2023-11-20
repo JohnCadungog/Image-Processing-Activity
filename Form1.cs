@@ -18,9 +18,11 @@ namespace ImageProcessingActivity
         Bitmap resultImage;
         Bitmap histoImage;
 
+
         public Form1()
         {
             InitializeComponent();
+            
         }
 
         private void Histogram(ref Bitmap a, ref Bitmap b)
@@ -40,7 +42,7 @@ namespace ImageProcessingActivity
                     sample = originalCopy.GetPixel(x, y);
                     graydata = (byte)((sample.R + sample.G + sample.B) / 3);
                     gray = Color.FromArgb(graydata, graydata, graydata);
-                    a.SetPixel(x, y, gray);
+                    originalCopy.SetPixel(x, y, gray);
                 }
             }
 
@@ -100,7 +102,9 @@ namespace ImageProcessingActivity
         private void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
-           // Histogram(ref loadedImage, ref histoImage);
+            // Histogram(ref loadedImage, ref histoImage);
+           
+
 
             
         }
