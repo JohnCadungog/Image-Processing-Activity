@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,12 +29,15 @@ namespace ImageProcessingActivity
             Color gray;
             Byte graydata;
 
+            // Create a copy of the original image
+            Bitmap originalCopy = new Bitmap(a);
+
             // Grayscale Conversion
-            for (int x = 0; x < a.Width; x++)
+            for (int x = 0; x < originalCopy.Width; x++)
             {
-                for (int y = 0; y < a.Height; y++)
+                for (int y = 0; y < originalCopy.Height; y++)
                 {
-                    sample = a.GetPixel(x, y);
+                    sample = originalCopy.GetPixel(x, y);
                     graydata = (byte)((sample.R + sample.G + sample.B) / 3);
                     gray = Color.FromArgb(graydata, graydata, graydata);
                     a.SetPixel(x, y, gray);
@@ -41,7 +45,7 @@ namespace ImageProcessingActivity
             }
 
             // Histogram 1D data
-            int[] histdata = new int[256]; 
+            int[] histdata = new int[256];
             for (int x = 0; x < a.Width; x++)
             {
                 for (int y = 0; y < a.Height; y++)
@@ -53,7 +57,7 @@ namespace ImageProcessingActivity
 
             // Bitmap Graph Generation
             // Setting empty Bitmap with background color
-            b = new Bitmap(histdata.Length, 800);
+            b = new Bitmap(256, 800);
             for (int x = 0; x < histdata.Length; x++)
             {
                 for (int y = 0; y < 800; y++)
@@ -73,6 +77,7 @@ namespace ImageProcessingActivity
 
             imageHistogram.Image = b;
         }
+
 
 
         private void copyToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -170,15 +175,16 @@ namespace ImageProcessingActivity
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (!showHistogram.Checked)
+            if (showHistogram.Checked && processedImage.Image != null)
             {
                 // Clear the histogram picture box
-                imageHistogram.Image = null; 
+                Histogram(ref resultImage, ref histoImage);
+                
             }
-            else
+            if(!showHistogram.Checked)
             {
                 // Show the histogram
-                Histogram(ref resultImage, ref histoImage);
+                imageHistogram.Image = null;
             }
         }
         private void UpdateHistogram()
@@ -193,5 +199,43 @@ namespace ImageProcessingActivity
         {
 
         }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (processedImage.Image != null)
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "JPEG Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif|PNG Image|*.png";
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Get the file name from the dialog
+                    string fileName = saveDialog.FileName;
+
+                    // Determine the file format based on the chosen filter
+                    ImageFormat format = ImageFormat.Jpeg; // Default to JPEG
+                    string ext = System.IO.Path.GetExtension(fileName);
+                    switch (ext.ToLower())
+                    {
+                        case ".bmp":
+                            format = ImageFormat.Bmp;
+                            break;
+                        case ".gif":
+                            format = ImageFormat.Gif;
+                            break;
+                        case ".png":
+                            format = ImageFormat.Png;
+                            break;
+                    }
+
+                    // Save the image
+                    processedImage.Image.Save(fileName, format);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No image to save.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

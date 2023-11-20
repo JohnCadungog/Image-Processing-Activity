@@ -34,11 +34,11 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.greyScaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.colorInversionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sepiaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonLoad = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.saveButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.showHistogram = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,16 +52,16 @@
             // 
             // imageHistogram
             // 
-            this.imageHistogram.Location = new System.Drawing.Point(531, 27);
+            this.imageHistogram.Location = new System.Drawing.Point(499, 27);
             this.imageHistogram.Name = "imageHistogram";
-            this.imageHistogram.Size = new System.Drawing.Size(279, 250);
+            this.imageHistogram.Size = new System.Drawing.Size(275, 322);
             this.imageHistogram.TabIndex = 0;
             this.imageHistogram.TabStop = false;
             // 
             // orignalImage
             // 
             this.orignalImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.orignalImage.Location = new System.Drawing.Point(105, 315);
+            this.orignalImage.Location = new System.Drawing.Point(105, 406);
             this.orignalImage.Name = "orignalImage";
             this.orignalImage.Size = new System.Drawing.Size(311, 250);
             this.orignalImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -71,7 +71,7 @@
             // processedImage
             // 
             this.processedImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.processedImage.Location = new System.Drawing.Point(499, 315);
+            this.processedImage.Location = new System.Drawing.Point(499, 406);
             this.processedImage.Name = "processedImage";
             this.processedImage.Size = new System.Drawing.Size(311, 250);
             this.processedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -102,28 +102,28 @@
             // greyScaleToolStripMenuItem
             // 
             this.greyScaleToolStripMenuItem.Name = "greyScaleToolStripMenuItem";
-            this.greyScaleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.greyScaleToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.greyScaleToolStripMenuItem.Text = "Grey Scale";
             this.greyScaleToolStripMenuItem.Click += new System.EventHandler(this.greyScaleToolStripMenuItem_Click);
-            // 
-            // copyToolStripMenuItem1
-            // 
-            this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
-            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.copyToolStripMenuItem1.Text = "Copy";
-            this.copyToolStripMenuItem1.Click += new System.EventHandler(this.copyToolStripMenuItem1_Click);
             // 
             // colorInversionToolStripMenuItem
             // 
             this.colorInversionToolStripMenuItem.Name = "colorInversionToolStripMenuItem";
-            this.colorInversionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.colorInversionToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.colorInversionToolStripMenuItem.Text = "Color Inversion";
             this.colorInversionToolStripMenuItem.Click += new System.EventHandler(this.colorInversionToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem1
+            // 
+            this.copyToolStripMenuItem1.Name = "copyToolStripMenuItem1";
+            this.copyToolStripMenuItem1.Size = new System.Drawing.Size(154, 22);
+            this.copyToolStripMenuItem1.Text = "Copy";
+            this.copyToolStripMenuItem1.Click += new System.EventHandler(this.copyToolStripMenuItem1_Click);
             // 
             // sepiaToolStripMenuItem
             // 
             this.sepiaToolStripMenuItem.Name = "sepiaToolStripMenuItem";
-            this.sepiaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sepiaToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.sepiaToolStripMenuItem.Text = "Sepia";
             this.sepiaToolStripMenuItem.Click += new System.EventHandler(this.sepiaToolStripMenuItem_Click);
             // 
@@ -137,14 +137,15 @@
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button1
+            // saveButton
             // 
-            this.button1.Location = new System.Drawing.Point(192, 207);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(98, 34);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
+            this.saveButton.Location = new System.Drawing.Point(192, 207);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(98, 34);
+            this.saveButton.TabIndex = 5;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // openFileDialog1
             // 
@@ -165,7 +166,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(528, 280);
+            this.label1.Location = new System.Drawing.Point(528, 352);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 7;
@@ -174,7 +175,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(496, 568);
+            this.label2.Location = new System.Drawing.Point(496, 659);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 13);
             this.label2.TabIndex = 8;
@@ -184,7 +185,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(102, 568);
+            this.label3.Location = new System.Drawing.Point(102, 659);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(75, 13);
             this.label3.TabIndex = 9;
@@ -194,12 +195,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(918, 593);
+            this.ClientSize = new System.Drawing.Size(918, 709);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.showHistogram);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.buttonLoad);
             this.Controls.Add(this.processedImage);
             this.Controls.Add(this.orignalImage);
@@ -230,7 +231,7 @@
         private System.Windows.Forms.ToolStripMenuItem colorInversionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sepiaToolStripMenuItem;
         private System.Windows.Forms.Button buttonLoad;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox showHistogram;
         private System.Windows.Forms.Label label1;
