@@ -8,16 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.XPath;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using HNUDIP;
+using WebCamLib;
+using Image = System.Drawing.Image;
 
 namespace ImageProcessingActivity
-{
+{    
+  
     public partial class Form1 : Form
     {
-        Bitmap loadedImage;
+        Bitmap loadedImage, backgroundImage, colorGreen;
         Bitmap resultImage;
+        Bitmap resultImageBackground;
         Bitmap histoImage;
 
+      
 
         public Form1()
         {
@@ -53,7 +61,7 @@ namespace ImageProcessingActivity
                 for (int y = 0; y < a.Height; y++)
                 {
                     sample = a.GetPixel(x, y);
-                    histdata[sample.R]++; // can be any color property r, g, or b
+                    histdata[sample.G]++; // can be any color property r, g, or b
                 }
             }
 
@@ -71,9 +79,9 @@ namespace ImageProcessingActivity
             // Plotting points based on histdata
             for (int x = 0; x < histdata.Length; x++)
             {
-                for (int y = 0; y < Math.Min(histdata[x] / 5, b.Height - 1); y++)
+                for (int y = 0; y < Math.Min(histdata[x] / 5, 800); y++)
                 {
-                    b.SetPixel(x, (b.Height - 1) - y, Color.Black);
+                    b.SetPixel(x, 799  - y, Color.Black);
                 }
             }
 
@@ -204,6 +212,135 @@ namespace ImageProcessingActivity
 
         }
 
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            openFileDialog2.ShowDialog();
+
+        }
+
+        private void openFileDialog2_FileOk(object sender, CancelEventArgs e)
+        {
+        
+            backgroundImage = new Bitmap(openFileDialog2.FileName);
+            loadBackgroundImageBox.Image = backgroundImage;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Color myGreen = Color.FromArgb(0, 255, 0);
+            int greyGreen = (myGreen.R + myGreen.G + myGreen.B) / 3;
+            int threshold = 5;
+
+            colorGreen = new Bitmap(backgroundImage.Width, backgroundImage.Width);
+
+            for (int x = 0; x < loadedImage.Width; x++)
+            {
+                for (int y = 0; y < loadedImage.Height; y++)
+                {
+                    Color pixel = loadedImage.GetPixel(x, y);
+                    Color backPixel = backgroundImage.GetPixel(x, y);
+                    int grey = (pixel.R + pixel.G + pixel.B) / 3;
+                    int subtractvalue = Math.Abs(grey - greyGreen);
+
+                    if (subtractvalue > threshold)
+
+                        colorGreen.SetPixel(x, y, pixel);
+                    else
+                       colorGreen.SetPixel(x, y, backPixel);
+
+                }
+                
+            }
+            subtractedImage.Image = colorGreen;
+
+        }
+        Device[] devices = DeviceManager.GetAllDevices();
+        Device cam = DeviceManager.GetDevice(0);
+        Boolean isSubtract = false;
+
+
+        private void camSubtract_Click(object sender, EventArgs e)
+        {
+            isSubtract = !isSubtract;
+            IDataObject data;
+            Image bmap;
+            devices[0].Sendmessage();
+            data = Clipboard.GetDataObject();
+            bmap = (Image)(data.GetData("System.Drawing.Bitmap", true));
+
+            if (backgroundImage != null && bmap.Size == backgroundImage.Size)
+            {
+                timer1.Enabled = isSubtract;
+                label7.Visible = false;
+            }
+            else if (backgroundImage == null)
+            {
+                Console.WriteLine("Background is null");
+            }
+            else
+
+            {
+                label7.Visible = true;
+                Console.WriteLine(backgroundImage.Size);
+                Console.WriteLine(backgroundImage.Size);
+            }
+        }
+
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            IDataObject data;
+            Image bmap;
+            devices[0].Sendmessage();
+            data = Clipboard.GetDataObject();
+
+            int threshold = 100;
+
+            if (data != null)
+            {
+                bmap = (Image)(data.GetData("System.Drawing.Bitmap", true));
+
+                // Check if the retrieved data is a valid image
+                if (bmap != null)
+                {
+                    Bitmap b = new Bitmap(bmap);
+
+                    ImageProcess2.BitmapFilter.Subtract(b, backgroundImage, Color.Green, threshold);
+
+                    subtractedImage.Image = b;
+                }
+                else
+                {
+                    // Handle case where clipboard data is not a valid image
+                    Console.WriteLine("Clipboard data is not a valid image.");
+                }
+            }
+            else
+            {
+                // Handle case where clipboard data is not available
+                Console.WriteLine("Clipboard data is not available.");
+            }
+        }
+
+
+
+        private void cameraButton_Click(object sender, EventArgs e)
+        {
+
+            cam.ShowWindow(orignalImage);
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void saveButton_Click(object sender, EventArgs e)
         {
             if (processedImage.Image != null)
@@ -241,5 +378,9 @@ namespace ImageProcessingActivity
             }
         }
 
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
